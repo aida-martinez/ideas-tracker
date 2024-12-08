@@ -1,0 +1,12 @@
+label{
+	@apply text-xs uppercase font-semibold mb-1 block;
+}
+input,
+textarea,
+select{
+	@apply bg-white border border-gray-200 rounded-md p-2 w-full;
+}
+
+.form-list{
+	@apply space-y-4;
+}
