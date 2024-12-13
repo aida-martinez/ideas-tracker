@@ -2,7 +2,7 @@ import { ID, Query} from "appwrite";
 import type { Models } from "appwrite";
 import { database } from "~/appwrite";
 import { ref } from "vue";
-import { createSlug } from "~/utils/slufigy";
+import { createSlug } from "~/utils/slugify";
 
 const ideasDatabaseId: string = import.meta.env.VITE_DATABASE_ID;
 const ideasCollectionId: string = import.meta.env.VITE_COLLECTION_ID;

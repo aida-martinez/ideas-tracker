@@ -2,12 +2,15 @@ import { ID } from "appwrite";
 import { ref } from "vue";
 import { account } from "../appwrite";
 import { type Models } from 'appwrite';
+import { createSlug } from "~/utils/slugify";
 
 const current = ref<Models.Session | null>(null); // Reference to current user object
 
 export const useUserSession = () =>  {
-    const register = async (email: string, password: string): Promise<void> => {
-        await account.create(ID.unique(), email, password); // Register new user in Appwrite
+    const register = async (username: string, email: string, password: string): Promise<void> => {
+		const name = createSlug(username);
+
+        await account.create(ID.unique(), email, password, name); // Register new user in Appwrite
         await login(email, password); // Login registered user
     };
 

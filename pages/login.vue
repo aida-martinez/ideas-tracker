@@ -21,7 +21,7 @@
 		const form = event.target;
 		const formData = new FormData(form);
 
-		await user.register(formData.get('email'), formData.get('password'));
+		await user.register(formData.get('username'), formData.get('email'), formData.get('password'));
 
 		form.reset(); // Clear the form
 	};
@@ -30,7 +30,7 @@
 <template>
 	<div class="container">
 		<section class="w-5/12 mx-auto my-10">
-			<h2 class="text-4xl mb-4">Login/Register</h2>
+			<h2 class="title-section">Login/Register</h2>
 
 			<AuthForm v-if="isSignUp" :handle-submit="handleRegistration" submit-type="Sign Up"></AuthForm>
 			<AuthForm v-else :handle-submit="handleLogin" submit-type="Log In"></AuthForm>
