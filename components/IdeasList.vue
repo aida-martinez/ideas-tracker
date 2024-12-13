@@ -6,6 +6,8 @@ const ideas = useIdeas();
 const user = useUserSession();
 const errors = ref('');
 
+ideas.fetch();
+
 const handleUpdate = async (event) => {
 	const form = event.target;
 	const formData = new FormData(form);

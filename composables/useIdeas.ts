@@ -36,6 +36,19 @@ export const useIdeas = () => {
         current.value = response.documents as Idea[];
     };
 
+	const fetchOne = async ( slug: String ): Promise<void> =>{		
+		const response = await database.listDocuments(
+            ideasDatabaseId,
+            ideasCollectionId,
+            [
+				Query.equal("userId", user.current.value.userId),
+				Query.equal( "slug", slug ),
+				Query.limit(1)
+			]
+        );
+        current.value = response.documents as Idea[];
+	}
+
     // Add new idea to the database,
     // Change the value of the current object
     const add = async (idea: Idea): Promise<{success: boolean, message?: string}> => {
@@ -96,12 +109,11 @@ export const useIdeas = () => {
         await fetch(); // Refetch ideas to ensure we have 10 items
     };
 
-    fetch();
-
     return {
         add,
         current,
         fetch,
+		fetchOne,
 		update,
         remove,
     };

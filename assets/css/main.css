@@ -5,5 +5,7 @@
 @import 'tailwindcss/utilities';
 
 @import "parts/init.css";
-@import "parts/forms.css";
+@import "parts/typography.css";
 @import "parts/ui.css";
+@import "parts/forms.css";
+
