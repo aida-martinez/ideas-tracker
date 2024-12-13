@@ -2,6 +2,7 @@ import { ID, Query} from "appwrite";
 import type { Models } from "appwrite";
 import { database } from "~/appwrite";
 import { ref } from "vue";
+import { createSlug } from "~/utils/slufigy";
 
 const ideasDatabaseId: string = import.meta.env.VITE_DATABASE_ID;
 const ideasCollectionId: string = import.meta.env.VITE_COLLECTION_ID;
@@ -10,6 +11,7 @@ const queryLimit: number = 10;
 interface Idea extends Models.Document{
     title: string;
     description: string;
+	tags: string;
     userId: string;
 }
 
@@ -36,21 +38,57 @@ export const useIdeas = () => {
 
     // Add new idea to the database,
     // Change the value of the current object
-    const add = async (idea: Idea): Promise<void> => {
+    const add = async (idea: Idea): Promise<{success: boolean, message?: string}> => {
+		if (idea.title === "") {
+			return {
+				success: false,
+				message: "Your idea must have a title"
+			};
+		}
+		const slug = createSlug( idea.title );
+		idea.slug = slug;
+		
         const response = await database.createDocument(
-            ideasDatabaseId,
-            ideasCollectionId,
-            ID.unique(),
-            idea
-        );
-        current.value = [response, ...current.value as Idea[]].slice(0, 10) as Idea[];
+			ideasDatabaseId,
+			ideasCollectionId,
+			ID.unique(),
+			idea
+		);
+		current.value = [response, ...current.value as Idea[]].slice(0, 10) as Idea[];
+		
+		return {
+			success: true
+		};
     };
 
-    const edit = async (id: string): Promise<void> => {
-		console.log(id);
+    const update = async (idea: Idea): Promise<{success: boolean, message?: string}> => {
+		if (idea.title === "") {
+			return {
+				success: false,
+				message: "Your idea must have a title"
+			};
+		}
 		
-        //await database.deleteDocument(ideasDatabaseId, ideasCollectionId, id);
-        //await fetch(); // Refetch ideas to ensure we have 10 items
+		if ( idea.updateSlug ){
+			const slug = createSlug( idea.title );
+			idea.slug = slug;
+		} else {
+			idea.slug = idea.slug;
+		}
+		delete idea.updateSlug; // appwrite does not know about this property.
+
+		await database.updateDocument(
+			ideasDatabaseId,
+			ideasCollectionId,
+			idea.$id,
+			idea,
+		);
+		
+        await fetch(); // Refetch ideas to ensure we have 10 items
+
+		return {
+			success: true
+		};
     };
 
     const remove = async (id: string): Promise<void> => {
@@ -64,7 +102,7 @@ export const useIdeas = () => {
         add,
         current,
         fetch,
-		edit,
+		update,
         remove,
     };
 };

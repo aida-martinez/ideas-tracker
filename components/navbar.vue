@@ -6,7 +6,7 @@ const user = useUserSession();
 	<div class="py-3 px-6 border-b border-rose-600">
 		<!--- Navbar -->
 		<nav class="flex justify-between items-center">
-			<h3 class="text-4xl font-serif">Ideas Tracker</h3>
+			<h3 class="text-4xl font-serif"><a href="/">Ideas Tracker</a></h3>
 
 			<!-- Email and logout button if logged in user -->
 			<div
