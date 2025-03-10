@@ -1,12 +1,24 @@
 <script setup>
 import { SquareMinus, Pencil } from 'lucide-vue-next';
 import { Drawer, DrawerClose, DrawerContent, DrawerDescription, DrawerFooter, DrawerHeader, DrawerTitle, DrawerTrigger } from '@/components/ui/drawer'
+import MarkdownIt from 'markdown-it';
 
 const ideas = useIdeas();
 const user = useUserSession();
 const errors = ref('');
+const md = new MarkdownIt();
 
-ideas.fetch();
+// Add a method to render markdown
+const renderMarkdown = (content) => {
+    return content ? md.render(content) : '';
+};
+
+// Watch for user session changes
+watch(() => user.current.value, (newVal) => {
+    if (newVal) {
+        ideas.fetch();
+    }
+}, { immediate: true });
 
 const handleUpdate = async (event) => {
 	const form = event.target;
@@ -44,11 +56,13 @@ const splitTags = (tags) => {
 			<h4 class="title-section">Your Ideas</h4>
 
 			<ul class="space-y-4">
-				<template v-if="ideas.current.value && ideas.current.value.length">
+				<template v-if="ideas.current?.value && ideas.current.value.length">
 					<li v-for="idea in ideas.current.value" class="">
 						<div class="relative bg-purple/10 py-4 px-6 rounded-xl">
-							<h5 class="text-xl">{{ idea.title }}</h5>
-							<p class="text-base">{{ idea.description }}</p>
+							<NuxtLink :to="`/ideas/${user.username.value}/${idea.slug}`">
+								<h5 class="text-xl">{{ idea.title }}</h5>
+							</NuxtLink>
+							<div class="text-base prose" v-html="renderMarkdown(idea.description)"></div>
 
 							<template v-if="idea.tags">
 								<hr class="my-4 bg-purple/20" />

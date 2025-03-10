@@ -29,7 +29,7 @@
     "vue-router": "latest"
   },
   "devDependencies": {
-    "@tailwindcss/typography": "^0.5.15",
+    "@tailwindcss/typography": "^0.5.16",
     "autoprefixer": "^10.4.20",
     "nuxt-lucide-icons": "^1.0.5",
     "postcss": "^8.4.49",
